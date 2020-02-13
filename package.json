@@ -1,0 +1,26 @@
+{
+  "name": "qaAPI",
+  "version": "1.0.0",
+  "description": "API for the QA section of Project Greenfield",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jetproductions/qaAPI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jetproductions/qaAPI/issues"
+  },
+  "homepage": "https://github.com/jetproductions/qaAPI#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node": "^13.8.0",
+    "postgres": "^1.0.2",
+    "slonik": "^22.4.0"
+  }
+}
