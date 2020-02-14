@@ -1,6 +1,11 @@
 
+DROP DATABASE IF EXISTS db_auto;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS answers;
+DROP TABLE IF EXISTS answers_photos;
+
 CREATE DATABASE db_auto;
-USE db_auto;
+\c db_auto;
 CREATE TABLE questions(
   id int NOT NULL,
   product_id int,
@@ -26,6 +31,6 @@ CREATE TABLE answers_photos (
   answer_id INT,
   url varchar(2000)
 );
-COPY questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/questions.csv' WITH DELIMITER ',' CSV HEADER;
-COPY answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/answers_photos.csv' WITH DELIMITER ',' CSV HEADER;
-COPY answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/answers.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers.csv' WITH DELIMITER ',' CSV HEADER;
