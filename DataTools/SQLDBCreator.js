@@ -2,16 +2,14 @@
 
 const credentials = require('./dbcredentials');
 const buildQuery = require('./buildQuery');
-const sql = require('slonik');
 const pg = require('pg');
 
+const createDB = async () => {
+  const connectionStr = `postgres://${credentials.login}:${credentials.password}@postgres/5432`;
+  const pgClient = new pg.Client(connectionStr);
+  await pgClient.connect();
+  await pgClient.query(buildQuery);
+  await pgClient.end();
+}
 
-const connectionStr = `postgres://${credentials.login}:${credentials.password}@postgres/5432`;
-const pgClient = new pg.Client(connectionStr);
-pgClient.connect();
-
-const createDB = buildQuery;
-
-const creator = pgClient.query(createDB);
-
-pgClient.end();
+createDB();

@@ -1,6 +1,3 @@
-CREATE PROCEDURE populate
-
-BEGIN
 
 CREATE DATABASE db_auto;
 USE db_auto;
@@ -32,7 +29,3 @@ CREATE TABLE answers_photos (
 COPY questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/questions.csv' WITH DELIMITER ',' CSV HEADER;
 COPY answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/answers_photos.csv' WITH DELIMITER ',' CSV HEADER;
 COPY answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/answers.csv' WITH DELIMITER ',' CSV HEADER;
-
-END
-
-CALL populate;
