@@ -1,33 +1,17 @@
-import Converter from './CSVConverter';
-// import sql, { DatabaseConnectionType } from 'slonik';
+// attempt to write a db creator using JS rather than SQL
 
-// query to copy sample csv into db
-let type = 'questions';
-const createQuestionsTable = `CREATE TABLE questions(
-  id NOT NULL,
-  product_id INT,
-  body character varying(1000),
-  date_written DATE,
-  asker_name character varying(60),
-  asker_email character varying(60),
-  reported INT,
-  helpful INT
-)`;
+const credentials = require('./dbcredentials');
+const buildQuery = require('./buildQuery');
+const sql = require('slonik');
+const pg = require('pg');
 
-const createAnswersTable = `CREATE TABLE answers(
-  id NOT NULL,
-  question_id INT,
-  body character varying(1000),
-  date_written DATE,
-  answerer_name character varying(60),
-  answerer_email character varying(60),
-  reported INT,
-  helpful INT
-)`;
 
-const createAnswersPhoto = `CREATE TABLE questions(
-  id NOT NULL,
-  answer_id INT,
-  url character varying(2000)
-)`
-const questionsStubCopy = `COPY ${type} FROM '../CSV/questions_20.csv' DELIMITER ',' CSV HEADER;`
+const connectionStr = `postgres://${credentials.login}:${credentials.password}@postgres/5432`;
+const pgClient = new pg.Client(connectionStr);
+pgClient.connect();
+
+const createDB = buildQuery;
+
+const creator = pgClient.query(createDB);
+
+pgClient.end();
