@@ -1,13 +1,16 @@
+// can convert to ES6 if use transpiler
 const faker = require('faker');
+const fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-const answerDataGenerator = () => {
-  let start = 100000000;
-  const result = {};
-  faker.seed(10000000);
-  for (let i = 0; i < 10; i++) {
-    result[start + i] = {
-      id: (start + i),
-      question_id: Math.floor(Math.random() * start),
+const answerDataGenerator = async (start) => {
+  let startId = 100000000 * start;
+  const result = [];
+  faker.seed(startId);
+  for (let i = 0; i < 100000; i++) {
+    result[i] = {
+      id: (startId + i),
+      question_id: Math.floor(Math.random() * startId),
       body: faker.lorem.sentence(),
       date_written: faker.date.past(),
       answerer_name: faker.name.firstName() + ' ' + faker.name.lastName(),
@@ -16,7 +19,29 @@ const answerDataGenerator = () => {
       helpful: Math.floor((Math.random() * 100)),
     } 
   }
-  console.log(result);
-  return;
+  const csvWriter = createCsvWriter({
+    path: `./CSV/Answers/answers${start}.csv`,
+    header: ['id', 'question_id', 'body', 'date_written', 'answerer_name', 'answerer_email', 'reported', 'helpful']
+  });
+  csvWriter.writeRecords(result)
+  .then(() => {
+    console.log('...Done');
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 };
-answerDataGenerator();
+
+// refactor so can do async await for each with input of function and number
+const generateAll = async () => {
+  await answerDataGenerator(2);
+  await answerDataGenerator(3);
+  await answerDataGenerator(4);
+  await answerDataGenerator(5);
+  await answerDataGenerator(6);
+  await answerDataGenerator(7);
+  await answerDataGenerator(8);
+  await answerDataGenerator(9);
+  await answerDataGenerator(10);
+}
+generateAll();

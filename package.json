@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "populate": "psql -U postgres <~et/documents/hack-rxr-07/sdc/qaapi/dataTools/dbconfig.sql"
+    "populate": "psql -U postgres <~et/documents/hack-rxr-07/sdc/qaapi/dataTools/dbconfig.sql",
+    "generate-answers": "node ./DataTools/Generators/answerDataGenerator.js",
+    "generate-photos": "node ./DataTools/Generators/photoDataGenerator.js",
+    "generate-questions": "node ./DataTools/Generators/questionDataGenerator.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,7 @@
   },
   "homepage": "https://github.com/jetproductions/qaAPI#readme",
   "dependencies": {
+    "csv-writer": "^1.6.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "faker": "^4.1.0",
