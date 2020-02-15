@@ -12,7 +12,7 @@ const answerDataGenerator = async (start) => {
       id: (startId + i),
       question_id: Math.floor(Math.random() * startId),
       body: faker.lorem.sentence(),
-      date_written: faker.date.past(),
+      date_written: faker.date.past().toISOString().split('T')[0],
       answerer_name: faker.name.firstName() + ' ' + faker.name.lastName(),
       answerer_email: faker.internet.email(),
       reported: 0,

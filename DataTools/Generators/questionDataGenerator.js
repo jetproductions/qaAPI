@@ -1,17 +1,18 @@
 const faker = require('faker');
-const fs = require('fs');
+const { performance } = require('perf_hooks');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const questionDataGenerator = (start) => {
+  const t0 = performance.now();
   let startId = 1000000 * start;
   const result = [];
   faker.seed(startId);
-  for (let i = 0; i < 900000; i++) {
+  for (let i = 0; i < 1000000; i++) {
     result[i] = {
       id: (startId + i),
       product_id: Math.floor(Math.random() * start),
       body: faker.lorem.sentence() + '?',
-      date_written: faker.date.past(),
+      date_written: faker.date.past().toISOString().split('T')[0],
       asker_name: faker.name.firstName() + ' ' + faker.name.lastName(),
       asker_email: faker.internet.email(),
       reported: 0,
@@ -24,23 +25,40 @@ const questionDataGenerator = (start) => {
   });
   csvWriter.writeRecords(result)
   .then(() => {
-    console.log('...Done');
+    const t1 = performance.now();
+    const time = t1 - t0;
+    console.log(`...Done in ${time}`);
   })
   .catch((err) => {
     console.log(err);
   })
 };
 
-// refactor so can do async await for each with input of function and number
+// commented out all but 3 at a time to run and generate csv file and populate with data
+  // tried running in blocks and deleting but still overloads memory
+  // trying to force garbage collection but probably not importing function correctly
+  // not sure that forcing garbage collection would work the way I expect
 const generateAll = async () => {
-  await questionDataGenerator(2);
-  await questionDataGenerator(3);
-  await questionDataGenerator(4);
-  await questionDataGenerator(5);
-  await questionDataGenerator(6);
-  await questionDataGenerator(7);
-  await questionDataGenerator(8);
-  await questionDataGenerator(9);
-  await questionDataGenerator(10);
+  // let one = await questionDataGenerator(2);
+  // delete one;
+  // let two = await questionDataGenerator(3);
+  // delete two;
+  // let three = await questionDataGenerator(4);
+  // delete three;
+  // if (global.gc) global.gc();
+  // let four = await questionDataGenerator(5);
+  // delete four;
+  // let five = await questionDataGenerator(6);
+  // delete five;
+  // let six = await questionDataGenerator(7);
+  // delete six;
+  // if (global.gc) global.gc();
+  // let seven = await questionDataGenerator(8);
+  // delete seven;
+  // let eight = await questionDataGenerator(9);
+  // delete eight;
+  let nine = await questionDataGenerator(10);
+  delete nine;
 }
+
 generateAll();

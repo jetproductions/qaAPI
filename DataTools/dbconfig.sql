@@ -7,31 +7,41 @@ DROP TABLE IF EXISTS answers_photos;
 CREATE DATABASE db_auto;
 \c db_auto;
 CREATE TABLE questions(
-  id int NOT NULL,
-  product_id int,
-  body varchar(1000),
+  id INT PRIMARY KEY,
+  product_id INT,
+  body VARCHAR(1000),
   date_written DATE,
-  asker_name varchar(60),
-  asker_email varchar(60),
+  asker_name VARCHAR(60),
+  asker_email VARCHAR(60),
   reported INT,
   helpful INT
 );
 CREATE TABLE answers(
-  id int NOT NULL,
+  id INT PRIMARY KEY,
   question_id INT,
-  body character varying(1000),
+  body VARCHAR(1000),
   date_written DATE,
-  answerer_name character varying(60),
-  answerer_email character varying(60),
+  answerer_name VARCHAR(60),
+  answerer_email VARCHAR(60),
   reported INT,
   helpful INT
 );
 CREATE TABLE answers_photos (
-  id int NOT NULL,
+  id INT PRIMARY KEY,
   answer_id INT,
   url varchar(2000)
 );
 \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions1.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions2.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions3.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions4.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions5.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions6.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions7.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions8.csv' WITH DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions9.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions10.csv' WITH DELIMITER ',' CSV HEADER;
+
 
 \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos1.csv' WITH DELIMITER ',' CSV HEADER;
 \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos2.csv' WITH DELIMITER ',' CSV HEADER;
