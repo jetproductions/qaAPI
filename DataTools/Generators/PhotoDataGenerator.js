@@ -1,5 +1,6 @@
 const faker = require('faker');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const { performance } = require('perf_hooks');
 
 const photoDataGenerator = (start) => {
   let startId = start * 1000000;
@@ -27,14 +28,18 @@ const photoDataGenerator = (start) => {
 
 // refactor so can do async await for each with input of function and number
 const generateAll = async () => {
-  await dataGenerator(2);
-  await dataGenerator(3);
-  await dataGenerator(4);
-  await dataGenerator(5);
-  await dataGenerator(6);
-  await dataGenerator(7);
-  await dataGenerator(8);
-  await dataGenerator(9);
-  await dataGenerator(10);
+  const t0 = performance.now();
+  await photoDataGenerator(4);
+  await photoDataGenerator(5);
+  await photoDataGenerator(6);
+  await photoDataGenerator(7);
+  await photoDataGenerator(8);
+  await photoDataGenerator(9);
+  await photoDataGenerator(10);
+  await photoDataGenerator(11);
+  await photoDataGenerator(12);
+  const t1 = performance.now();
+  const time = t1 - t0;
+  console.log(`Photo Data Created in ${time}`);
 }
 generateAll();

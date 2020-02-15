@@ -38,27 +38,17 @@ const questionDataGenerator = (start) => {
   // tried running in blocks and deleting but still overloads memory
   // trying to force garbage collection but probably not importing function correctly
   // not sure that forcing garbage collection would work the way I expect
+  // look at using fs and move towards leanQuestion.js and get that running to test perf
 const generateAll = async () => {
-  // let one = await questionDataGenerator(2);
-  // delete one;
-  // let two = await questionDataGenerator(3);
-  // delete two;
-  // let three = await questionDataGenerator(4);
-  // delete three;
-  // if (global.gc) global.gc();
-  // let four = await questionDataGenerator(5);
-  // delete four;
-  // let five = await questionDataGenerator(6);
-  // delete five;
-  // let six = await questionDataGenerator(7);
-  // delete six;
-  // if (global.gc) global.gc();
-  // let seven = await questionDataGenerator(8);
-  // delete seven;
-  // let eight = await questionDataGenerator(9);
-  // delete eight;
-  let nine = await questionDataGenerator(10);
-  delete nine;
+  // await questionDataGenerator(4);
+  // await questionDataGenerator(5);
+  // await questionDataGenerator(6);
+  // await questionDataGenerator(7);
+  // await questionDataGenerator(8);
+  // await questionDataGenerator(9);
+  // await questionDataGenerator(10);
+  let eight = await questionDataGenerator(11);
+  let nine = await questionDataGenerator(12);
 }
 
 generateAll();
