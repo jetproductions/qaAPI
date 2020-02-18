@@ -1,19 +1,22 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 // const questions = require('./routes/questionRoutes');
 // const answers = require('./routes/answerRoutes');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const questionDB = require('./DB/questionsDB');
+const answerDB = require('./DB/answerDB');
+const port = 3000;
 
-// eventually add this in to serve public folder
-// app.use(express.static('public'))
 app.use(cors());
-// app.use('/qa', questions);
+app.use(bodyParser.json());
 
 // question routes
 // get questions
-app.get('/qa/:product_id', (req, res) => {
-  res.sendStatus(200);
+app.get('/qa/:product_id', async (req, res) => {
+  console.log('product_id: ', req.params.product_id)
+  const questionsFound = await questionDB.get(req.params.product_id);
+  res.send(questionsFound);
 });
 // create question
 app.post('/qa/:product_id', (req, res) => {
