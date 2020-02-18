@@ -5,8 +5,10 @@ const questions = require('./routes/questionRoutes');
 const answers = require('./routes/answerRoutes');
 const cors = require('cors');
 
+// eventually add this in to serve public folder
+// app.use(express.static('public'))
 app.use(cors());
-app.use('/qa/:product_id', questions);
+app.get('/qa/:product_id', questions.get);
 app.use('/qa/question', questions);
 app.use('/qa/:question_id/answers', answers);
 app.use('/qa/answer', answers);

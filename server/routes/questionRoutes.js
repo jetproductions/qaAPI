@@ -1,6 +1,8 @@
 
 const questions = require('express').Router();
 
+// TODO: not working yet 
+
 // ALL QUESTION ROUTES
 // read questions
 questions.get('/qa/:product_id', (req, res) => {

@@ -1,5 +1,7 @@
 const answers = require('express').Router();
 
+// TODO: not working yet 
+
 // ALL ANSWER ROUTES
 // read answers for question
 answers.get('qa/:question_id/answers', (req, res) => {

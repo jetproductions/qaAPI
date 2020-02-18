@@ -4,7 +4,7 @@
   "description": "API for the QA section of Project Greenfield",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/server.js",
     "populate": "psql -U postgres <~et/documents/hack-rxr-07/sdc/qaapi/dataTools/dbconfig.sql",
     "generate-answers": "node ./DataTools/Generators/answerDataGenerator.js",
     "generate-photos": "node ./DataTools/Generators/photoDataGenerator.js",
