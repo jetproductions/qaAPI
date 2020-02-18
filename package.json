@@ -4,7 +4,7 @@
   "description": "API for the QA section of Project Greenfield",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server/server.js",
+    "start": "nodemon ./server/server.js",
     "populate": "psql -U postgres <~et/documents/hack-rxr-07/sdc/qaapi/dataTools/dbconfig.sql",
     "generate-answers": "node ./DataTools/Generators/answerDataGenerator.js",
     "generate-photos": "node ./DataTools/Generators/photoDataGenerator.js",
@@ -29,6 +29,7 @@
     "faker": "^4.1.0",
     "json": "^9.0.6",
     "node": "^13.8.0",
+    "nodemon": "^2.0.2",
     "pg": "^7.18.1",
     "pg-hstore": "^2.3.3",
     "postgres": "^1.0.2",

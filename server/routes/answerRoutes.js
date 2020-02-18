@@ -1,4 +1,4 @@
-const answers = require('express').Router();
+const answers = require('express');
 
 // TODO: not working yet 
 
