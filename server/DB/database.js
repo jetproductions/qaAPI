@@ -13,10 +13,20 @@ const setup = {
   port: 5432,
 }
 // working just takes some time 
-const get = async (product_id, type, count) => {
+const get = async (id, type, count) => {
   const client = new Client(setup);
   client.connect();
-  const res = await client.query(`SELECT * FROM questions_answers.${type} WHERE product_id=${product_id} LIMIT ${count}`);
+  
+  let limit = `LIMIT ${count}`;
+  let idType;
+  if (type === 'questions') idType = 'product_id';
+  if (type === 'answers') idType = 'question_id';
+  if (type === 'answers_photos') {
+    idType = 'answer_id'
+    limit = null
+  }
+
+  const res = await client.query(`SELECT * FROM questions_answers.${type} WHERE ${idType}=${id} ${limit}`);
   client.end();
   return res
 };
