@@ -8,13 +8,13 @@ const Photos = require('./dbAnswerPhotos');
 // TODO: refactor report and helpful into 1 update function
 
 const answers = {};
+const pool = new Pool(Setup);
 
 answers.get = async (id, count) => {
+  await pool.connect();
+
   try {
-    const client = new Client(Setup);
-    await client.connect();
-    const res = await client.query(`SELECT * FROM questions_answers.answers WHERE question_id=${id} LIMIT ${count}`);
-    client.end();
+    const res = await pool.query(`SELECT * FROM questions_answers.answers WHERE question_id=${id} LIMIT ${count}`);
     return res.rows;
   } catch {
     console.log('error in dbAnswers.get');
@@ -22,23 +22,19 @@ answers.get = async (id, count) => {
 };
 
 answers.add = async (answer) => {
-  const pool = new Pool(Setup);
   await pool.connect();
-
   try {
-    const { question_id, body, answerer_name, answerer_email } = answer;
-    const { photos } = answer;
+    const { body, answerer_name, answerer_email } = answer.body;
+    const { question_id } = answer.params;
 
     let date = new Date();
     date = date.toISOString().split('T')[0];
-
     // this can probably be streamlined
     let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.answers');
     id = id.rows[0]['?column?'] + 1;
-
     const queryText = {
-      text: 'INSERT INTO questions_answers.answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
-      values: [id, question_id, body, date, answerer_name, answerer_email],
+      text: 'INSERT INTO questions_answers.answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)',
+      values: [id, question_id, body, date, answerer_name, answerer_email]
     };
     const res = await pool.query(queryText);
     return res;
@@ -49,7 +45,6 @@ answers.add = async (answer) => {
 };
 
 answers.helpful = async (id) => {
-  const pool = new Pool(Setup);
   await pool.connect();
   
   try {
@@ -67,7 +62,7 @@ answers.helpful = async (id) => {
 };
 
 answers.report = async (id) => {
-  const pool = new Pool(Setup);
+  // const pool = new Pool(Setup);
   await pool.connect();
   
   try {

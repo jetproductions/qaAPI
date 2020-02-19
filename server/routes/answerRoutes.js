@@ -17,8 +17,8 @@ answers.get = async (req, res) => {
 
 answers.post = async (req, res) => {
   try {
-    const answerPost = await dbAnswers.add(req.body);
-    console.log('answerPost: ', answerPost);
+    const answerPost = await dbAnswers.add(req);
+    // console.log('answerPost: ', answerPost);
     answerPost !== 'error' ? res.sendStatus(201) : res.sendStatus(404);
   } catch {
     console.error('error posting answer');

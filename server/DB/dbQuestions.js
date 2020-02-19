@@ -4,7 +4,9 @@ const Setup = require('./setup');
 
 // TODO: refactor update functions into one
 
-const questions = {}
+const questions = {};
+const pool = new Pool(Setup);
+
 // working just takes some time 
 questions.get = async (id, count = 5) => {
   const client = new Client(Setup);
@@ -16,11 +18,10 @@ questions.get = async (id, count = 5) => {
 };
 
 questions.add = async (req) => {
-  const pool = new Pool(Setup);
   await pool.connect();
 
   try {
-    const product_id = req.params.product_id;
+    const { product_id } = req.params;
     const { body, asker_name, asker_email } = req.body;
 
     let date = new Date();
