@@ -13,40 +13,52 @@ questions.get = async (id, count = 5) => {
   return res.rows;
 };
 
-questions.add = async (data) => {
+questions.add = async (req) => {
   const pool = new Pool(Setup);
+  await pool.connect();
 
   try {
+    const product_id = req.params.product_id;
+    const { body, asker_name, asker_email } = req.body;
+
     let date = new Date();
     date = date.toISOString().split('T')[0];
 
-    await pool.connect();
-
+    // this can probably be streamlined
     let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.questions');
-    id.rows[0]['?column?']++;
+    id = id.rows[0]['?column?'] + 1;
 
     const queryText = {
       text: 'INSERT INTO questions_answers.questions(id, product_id, body, date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
-      values: [id, data.product_id, data.body, date, data.asker_name, data.asker_email],
+      values: [id, product_id, body, date, asker_name, asker_email],
     };
-    const res = await client.query(queryText);
+    const res = await pool.query(queryText);
+    console.log('res for add answer: ', res.rows);
 
     return res;
   } catch {
     console.log('error in questionDB.add');
+    return 'error'
   }
 };
 
-questions.update = async (question_id, target) => {
-  try{
-    const client = new Client(Setup);
-    client.connect();
-    const res = await client.query(`UPDATE questions_answers.questions SET ${target}= ${target} + 1  WHERE id=${question_id} `);
-    client.end();
-    return res; 
+questions.helpful = async (id) => {
+  const pool = new Pool(Setup);
+  await pool.connect();
+
+  id = parseInt(id);
+  
+  try {
+    const queryText = {
+      text: 'UPDATE questions_answers.questions SET helpful = helpful + 1 WHERE id = $1',
+      values: [id]
+    }
+    const res = await pool.query(queryText);
+    return res;
   }
   catch {
-    console.log(`error in questionDB.update with ${target}`)
+    console.log(`error in questionDB.helpful`);
+    return 'error';
   }
 };
 

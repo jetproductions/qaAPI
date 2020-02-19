@@ -25,19 +25,19 @@ const add = async (answer) => {
   try {
     const { question_id, body, answerer_name, answerer_email } = answer;
     const { photos } = answer;
+
     let date = new Date();
     date = date.toISOString().split('T')[0];
+
     // this can probably be streamlined
     let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.answers');
     id = id.rows[0]['?column?'] + 1;
+
     const queryText = {
       text: 'INSERT INTO questions_answers.answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
       values: [id, question_id, body, date, answerer_name, answerer_email],
     };
-
     const res = await pool.query(queryText);
-
-    console.log('res for add answer: ', res.rows);
     return res;
   } catch {
     console.log('error in dbAnswers.add');

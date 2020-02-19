@@ -32,9 +32,9 @@ app.get('/qa/:question_id/answers', (req, res) => answers.get(req, res));
 // create answer
 app.post('/qa/:question_id/answers', (req, res) => answers.post(req, res));
 // update answer helpful
-app.put('/qa/answer/:answer_id/helpful', (req, res) => answers.update(req, res));
+app.put('/qa/answer/:answer_id/helpful', (req, res) => answers.helpful(req, res));
 // update question helpful
-app.put('/qa/answer/:answer_id/report', (req, res) => answers.update(req, res));
+app.put('/qa/answer/:answer_id/report', (req, res) => answers.report(req, res));
 
 
 app.listen(port, () => { console.log(`The sever is running on port ${port}`)});

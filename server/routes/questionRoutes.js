@@ -12,11 +12,11 @@ questions.get = async (req, res) => {
   }
 };
 
-questions.post = async (req, res) => {
+questions.add = async (req, res) => {
   try {
-    const added = await dbQuestions.add(req.body);
+    const added = await dbQuestions.add(req);
     console.log('added question res: ', added);
-    res.sendStatus(201);
+    return added !== 'error' ? res.sendStatus(201) : res.sendStatus(404);
   } catch {
     console.log('error with posting question');
     res.sendStatus(404);
@@ -24,14 +24,25 @@ questions.post = async (req, res) => {
 };
 
 questions.helpful = async (req, res) => {
+  // console.log('req: ', parseInt(req.params.question_id));
   try {
-    // update to handle report and helpful endpoints
-    const updated = await dbQuestions.update(req.params.id)
-    res.sendStatus(204);
+    const updated = await dbQuestions.helpful(req.params.question_id);
+    return updated !== 'error' ? res.sendStatus(204) : res.sendStatus(404);
   } catch {
-    console.log(`error updating questions`);
+    console.log(`error updating helpful questions`);
+    res.sendStatus(404);
   }
-},
+};
+
+questions.report = async (req, res) => {
+  try {
+    const updated = await dbQuestions.report(req.params.id);
+    return updated !== 'error' ? res.sendStatus(204) : res.sendStatus(404);
+  } catch {
+    console.log('error reporting question');
+    res.sendStatus(404);
+  }
+};
 
 
 module.exports = questions;
