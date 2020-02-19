@@ -1,17 +1,29 @@
 const dbQuestions = require('../DB/dbQuestions');
-const questions = {};
 
+const questions = {}
 questions.get = async (req, res) => {
-  console.log('product_id: ', req.params.product_id);
-  const count = req.params.count ? req.params.count : 5;
-  console.log('count: ', count);
-  const questionsFound = await dbQuestions.get(req.params.product_id, count);
-  res.send(questionsFound);
-},
-questions.post = () => {
+  try {
+    const count = req.params.count ? req.params.count : 5;
+    const questionsFound = await dbQuestions.get(req.params.product_id, count);
+    res.send(questionsFound);
+  } catch {
+    console.error('error with getting questions');
+    res.sendStatus(404);
+  }
+ 
+};
 
-},
-questions.update = () => {
+questions.post = async (req, res) => {
+  try {
+    const added = await dbQuestions.add(req.body);
+    res.send(201, added);
+  } catch {
+    console.log('error with posting question');
+    res.sendStatus(404);
+  }
+};
+
+questions.update = async (req, res) => {
   
 },
 

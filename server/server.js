@@ -47,27 +47,7 @@ app.put('/qa/question/:question_id/report', (req, res) => {
 
 // answer routes
 // get answers
-// app.get('/qa/:question_id/answers', async (req, res) => {
-//   // need try/catch block
-//   const count = req.params.count ? req.params.count : 5;
-//   try {
-//     const answersFound = await db.get(req.params.question_id, 'answers', count);
-//     answersFound.forEach(async (answer) => {
-//       answer.photos = [];
-//     });
-
-//     // db.get call for each answer to get photos for each
-//     for (let i = 0; i < answersFound.length; i++) {
-//       let photos = await db.get(answersFound[i].id, 'answers_photos', 5);
-//       answersFound[i].photos = photos;
-//     }
-//     res.send(answersFound);
-//   } catch {
-//     console.log('error in get answers');
-//     res.sendStatus(404);
-//   }
-//   // console.log('answers after photos arr added: ', answersFound);
-// });
+app.get('/qa/:question_id/answers', (req, res) => answers.get(req, res));
 
 // create answer
 app.post('/qa/:question_id/answers', (req, res) => {

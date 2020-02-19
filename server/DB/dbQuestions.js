@@ -3,7 +3,7 @@ const Setup = require('./setup');
 // TODO: add and update stubbed out but not working yet
 
 // working just takes some time 
-const get = async (id, count) => {
+const get = async (id, count = 5) => {
   const client = new Client(Setup);
   client.connect();
 
@@ -22,8 +22,7 @@ const add = async (data) => {
     const res = await client.query(`INSERT INTO questions_answers.questions VALUES ${data}`);
     client.end();
     return res;
-  }
-  catch {
+  } catch {
     console.log('error in questionDB.add');
   }
 }

@@ -1,23 +1,15 @@
-// const answers = require('express');
+const dbAnswers = require('../DB/dbAnswers');
 
-// // TODO: not working yet 
-
-// // ALL ANSWER ROUTES
-// // read answers for question
-// answers.get('qa/:question_id/answers', (req, res) => {
-//   res.status(200);
-// });
-// // create answer
-// answers.post('/qa/:question_id/answers', (req, res) => {
-//   res.sendStatus(201);
-// });
-// // update answer helpful
-// answers.put('/qa/answer/:answer_id/helpful', (req, res) => {
-//   res.sendStatus(204);
-// });
-// // update answer report 
-// answers.put('qa/answer/:answer_id/report', (req, res) => {
-//   res.sendStatus(204);
-// });
-
-// module.exports = answers;
+const answers = {};
+answers.get = async (req, res) => {
+  try {
+    console.log(req.params)
+    const count = req.params.count ? req.params.count : 5;
+    const answersFound = await dbAnswers.get(req.params.question_id, count);
+    res.send(answersFound);
+  } catch {
+    console.error('error with getting answers');
+    res.sendStatus(404);
+  }
+}
+module.exports = answers;
