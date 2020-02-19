@@ -9,11 +9,8 @@ const pool = new Pool(Setup);
 
 // working just takes some time 
 questions.get = async (id, count = 5) => {
-  const client = new Client(Setup);
-  client.connect();
-
-  const res = await client.query(`SELECT * FROM questions_answers.questions WHERE product_id=${id} LIMIT ${count}`);
-  client.end();
+  pool.connect();
+  const res = await pool.query(`SELECT * FROM questions_answers.questions WHERE product_id=${id} LIMIT ${count}`);
   return res.rows;
 };
 

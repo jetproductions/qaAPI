@@ -26,7 +26,8 @@ answers.add = async (answer) => {
   try {
     const { body, answerer_name, answerer_email } = answer.body;
     const { question_id } = answer.params;
-
+    const photos = answer.body.photos || [];
+    const length = photos.length;
     let date = new Date();
     date = date.toISOString().split('T')[0];
     // this can probably be streamlined
