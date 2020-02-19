@@ -4,9 +4,10 @@ const Setup = require('./setup');
 const Photos = require('./dbAnswerPhotos');
 
 // TODO: get needs to also get answers_photos for each photo
-// TODO: add neesd to check if photos and then add them if necessary
+// TODO: add needs to check if photos and then add them if necessary
+const answers = {};
 
-const get = async (id, count) => {
+answers.get = async (id, count) => {
   try {
     const client = new Client(Setup);
     await client.connect();
@@ -18,7 +19,7 @@ const get = async (id, count) => {
   }
 };
 
-const add = async (answer) => {
+answers.add = async (answer) => {
   const pool = new Pool(Setup);
   await pool.connect();
 
@@ -45,15 +46,11 @@ const add = async (answer) => {
   }
 };
 
-const update = async (id, type) => {
+answers.helpful = async (id) => {
   try {
 
   } catch {
     console.log('error in dbAnswers.update');
   }
 }
-module.exports = {
-  get,
-  add,
-  update,
-}
+module.exports = answers;

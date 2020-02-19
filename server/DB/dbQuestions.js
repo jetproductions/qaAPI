@@ -1,6 +1,8 @@
 const { Pool, Client } = require('pg');
+
 const Setup = require('./setup');
-// TODO: add and update stubbed out but not working yet
+
+// TODO: refactor update functions into one
 
 const questions = {}
 // working just takes some time 
@@ -45,7 +47,6 @@ questions.add = async (req) => {
 questions.helpful = async (id) => {
   const pool = new Pool(Setup);
   await pool.connect();
-
   id = parseInt(id);
   
   try {
@@ -58,6 +59,25 @@ questions.helpful = async (id) => {
   }
   catch {
     console.log(`error in questionDB.helpful`);
+    return 'error';
+  }
+};
+
+questions.report = async (id) => {
+  const pool = new Pool(Setup);
+  await pool.connect();
+  // id = parseInt(id);
+  
+  try {
+    const queryText = {
+      text: 'UPDATE questions_answers.questions SET reported = reported + 1 WHERE id = $1',
+      values: [id]
+    }
+    const res = await pool.query(queryText);
+    return res;
+  }
+  catch {
+    console.log(`error in questionDB.report`);
     return 'error';
   }
 };

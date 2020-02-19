@@ -24,7 +24,6 @@ questions.add = async (req, res) => {
 };
 
 questions.helpful = async (req, res) => {
-  // console.log('req: ', parseInt(req.params.question_id));
   try {
     const updated = await dbQuestions.helpful(req.params.question_id);
     return updated !== 'error' ? res.sendStatus(204) : res.sendStatus(404);
@@ -36,7 +35,7 @@ questions.helpful = async (req, res) => {
 
 questions.report = async (req, res) => {
   try {
-    const updated = await dbQuestions.report(req.params.id);
+    const updated = await dbQuestions.report(req.params.question_id);
     return updated !== 'error' ? res.sendStatus(204) : res.sendStatus(404);
   } catch {
     console.log('error reporting question');
