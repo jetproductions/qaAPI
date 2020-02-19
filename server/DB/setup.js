@@ -1,5 +1,4 @@
 const { user, password } = require('../../DataTools/dbcredentials');
-
 module.exports = {
   user,
   host: 'localhost',

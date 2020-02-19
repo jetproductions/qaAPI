@@ -14,12 +14,15 @@ const get = async (id, count = 5) => {
 
 const add = async (data) => {
   try {  console.log('hitting add: ', data);
-    // add YYYY-MM-DD date generator below
-    const date_writen = 'current-date';
-    data = [data.id, data.product_id, data.body, date_writen, data.asker_name, data.asker_email, 0, 0];
+    let date = new Date();
+    date = date.toISOString().split('T')[0];
     const client = new Client(Setup);
     client.connect();
-    const res = await client.query(`INSERT INTO questions_answers.questions VALUES ${data}`);
+    const queryText = {
+      text: 'INSERT INTO questions_answers.questions(product_id, body, date_written, asker_name, asker_email) VALUES($1, $2, $3, $4,  $5)',
+      values: [data.product_id, data.body, date, data.asker_name, data.asker_email],
+    };
+    const res = await client.query(queryText);
     client.end();
     return res;
   } catch {

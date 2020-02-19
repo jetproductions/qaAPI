@@ -10,7 +10,7 @@ CREATE DATABASE db_auto;
 CREATE SCHEMA questions_answers;
 
 CREATE TABLE questions_answers.questions(
-  id INT PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY NOT NULL,
   product_id INT,
   body VARCHAR(1000),
   date_written DATE,
@@ -20,7 +20,7 @@ CREATE TABLE questions_answers.questions(
   helpful INT
 );
 CREATE TABLE questions_answers.answers(
-  id INT PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY NOT NULL,
   question_id INT REFERENCES questions_answers.questions(id),
   body VARCHAR(1000),
   date_written DATE,
@@ -30,7 +30,7 @@ CREATE TABLE questions_answers.answers(
   helpful INT
 );
 CREATE TABLE questions_answers.answers_photos (
-  id INT PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY NOT NULL,
   answer_id INT REFERENCES questions_answers.answers(id),
   url varchar(2000)
 );

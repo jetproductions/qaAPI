@@ -1,12 +1,10 @@
 const dbAnswers = require('../DB/dbAnswers');
 
-
 // TODO: post route working for answers hitting route with post
 const answers = {};
 
 answers.get = async (req, res) => {
   try {
-    console.log(req.params)
     const count = req.params.count ? req.params.count : 5;
     const answersFound = await dbAnswers.get(req.params.question_id, count);
     res.send(answersFound);
@@ -18,7 +16,7 @@ answers.get = async (req, res) => {
 
 answers.post = async (req, res) => {
   try {
-    console.log('create answer body: ', req.body);
+    // console.log('create answer body: ', req.body);
     const answerPost = await dbAnswers.add(req.body);
     console.log('answerPost: ', answerPost);
     res.sendStatus(201);
@@ -26,6 +24,24 @@ answers.post = async (req, res) => {
     console.error('error posting answer');
     res.sendStatus(404);
   }
-}
+};
+
+answers.helpful = async (req, res) => {
+  try {
+
+  } catch {
+    console.error('error updating helpful')
+  }
+};
+
+answers.report = async (req, res) => {
+  try {
+
+  } catch {
+    console.error('error updating report');
+    res.sendStatus(404);
+  }
+};
+
 
 module.exports = answers;

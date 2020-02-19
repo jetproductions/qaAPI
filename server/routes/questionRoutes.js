@@ -23,10 +23,11 @@ questions.post = async (req, res) => {
   }
 };
 
-questions.update = async (req, res) => {
+questions.helpful = async (req, res) => {
   try {
     // update to handle report and helpful endpoints
     const updated = await dbQuestions.update(req.params.id)
+    res.sendStatus(204);
   } catch {
     console.log(`error updating questions`);
   }
