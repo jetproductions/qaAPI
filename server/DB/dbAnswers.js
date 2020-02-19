@@ -5,6 +5,8 @@ const Photos = require('./dbAnswerPhotos');
 
 // TODO: get needs to also get answers_photos for each photo
 // TODO: add needs to check if photos and then add them if necessary
+// TODO: refactor report and helpful into 1 update function
+
 const answers = {};
 
 answers.get = async (id, count) => {
@@ -47,10 +49,38 @@ answers.add = async (answer) => {
 };
 
 answers.helpful = async (id) => {
+  const pool = new Pool(Setup);
+  await pool.connect();
+  
   try {
-
-  } catch {
-    console.log('error in dbAnswers.update');
+    const queryText = {
+      text: 'UPDATE questions_answers.answers SET helpful = helpful + 1 WHERE id = $1',
+      values: [id]
+    }
+    const res = await pool.query(queryText);
+    return res;
   }
-}
+  catch {
+    console.log(`error in answersDB.report`);
+    return 'error';
+  }
+};
+
+answers.report = async (id) => {
+  const pool = new Pool(Setup);
+  await pool.connect();
+  
+  try {
+    const queryText = {
+      text: 'UPDATE questions_answers.questions SET reported = reported + 1 WHERE id = $1',
+      values: [id]
+    }
+    const res = await pool.query(queryText);
+    return res;
+  }
+  catch {
+    console.log(`error in questionDB.report`);
+    return 'error';
+  }
+};
 module.exports = answers;

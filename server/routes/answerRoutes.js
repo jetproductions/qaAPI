@@ -28,17 +28,20 @@ answers.post = async (req, res) => {
 
 answers.helpful = async (req, res) => {
   try {
-
+    const updated = await dbAnswers.helpful(req.params.question_id);
+    return updated !== 'error' ? res.sendStatus(204) : res.sendStatus(404);
   } catch {
-    console.error('error updating helpful')
+    console.log('error reporting question');
+    res.sendStatus(404);
   }
 };
 
 answers.report = async (req, res) => {
   try {
-
+    const updated = await dbAnswers.report(req.params.question_id);
+    return updated !== 'error' ? res.sendStatus(204) : res.sendStatus(404);
   } catch {
-    console.error('error updating report');
+    console.log('error reporting question');
     res.sendStatus(404);
   }
 };
