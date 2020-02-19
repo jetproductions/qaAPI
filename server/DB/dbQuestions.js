@@ -1,34 +1,15 @@
 const { Pool, Client } = require('pg');
-
-const { login, password } = require('../../DataTools/dbcredentials');
-
-
+const Setup = require('./setup');
 // TODO: add and update stubbed out but not working yet
-const setup = {
-  user: login,
-  host: 'localhost',
-  database: 'db_auto',
-  schema: 'questions_answers',
-  password,
-  port: 5432,
-}
-// working just takes some time 
-const get = async (id, type, count) => {
-  const client = new Client(setup);
-  client.connect();
-  
-  let limit = `LIMIT ${count}`;
-  let idType;
-  if (type === 'questions') idType = 'product_id';
-  if (type === 'answers') idType = 'question_id';
-  if (type === 'answers_photos') {
-    idType = 'answer_id'
-    limit = null
-  }
 
-  const res = await client.query(`SELECT * FROM questions_answers.${type} WHERE ${idType}=${id} ${limit}`);
+// working just takes some time 
+const get = async (id, count) => {
+  const client = new Client(Setup);
+  client.connect();
+
+  const res = await client.query(`SELECT * FROM questions_answers.questions WHERE product_id=${id} LIMIT ${count}`);
   client.end();
-  return res
+  return res.rows;
 };
 
 const add = async (data) => {
@@ -36,7 +17,7 @@ const add = async (data) => {
     // add YYYY-MM-DD date generator below
     const date_writen = 'current-date';
     data = [data.id, data.product_id, data.body, date_writen, data.asker_name, data.asker_email, 0, 0];
-    const client = new Client(setup);
+    const client = new Client(Setup);
     client.connect();
     const res = await client.query(`INSERT INTO questions_answers.questions VALUES ${data}`);
     client.end();
@@ -48,10 +29,11 @@ const add = async (data) => {
 }
 const update = async (question_id, target) => {
   try{
-    const client = new Client(setup);
+    const client = new Client(Setup);
     client.connect();
     const res = await client.query(`UPDATE questions_answers.questions SET ${target}= ${target} + 1  WHERE id=${question_id} `);
-    return res;
+    client.end();
+    return res; 
   }
   catch {
     console.log(`error in questionDB.update with ${target}`)

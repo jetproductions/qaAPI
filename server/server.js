@@ -4,32 +4,30 @@ const app = express();
 // const answers = require('./routes/answerRoutes');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const db = require('./DB/database');
+
+const { questions, answers } = require('./routes/routes');
+
 const port = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// TODO: get router files working to clean up code
-// TODO: get post functionality working
-// TODO: get update functionality working
+// TODO: get photos within get answers
+// TODO: post functionality working
+// TODO: update functionality working
+// TODO: router files working to clean up code
 
 // question routes
 // get questions
-app.get('/qa/:product_id', async (req, res) => {
-  console.log('product_id: ', req.params.product_id);
-  const count = req.params.count ? req.params.count : 5;
-  console.log('count: ', count);
-  const questionsFound = await db.get(req.params.product_id, 'questions', count);
-  res.send(questionsFound);
-});
+app.get('/qa/:product_id', (req, res) => questions.get(req, res));
 
 // create question
 app.post('/qa/:product_id', async (req, res) => {
   console.log('hit post route');
-  try { 
-    const added = await db.add(req.body);
-  res.sendStatus(added);
+  try {
+    const added = await dbQuestions.add(req.body);
+    console.log('added question res: ', added);
+    res.sendStatus(added);
   }
   catch {
     console.log('error posting data');
@@ -49,14 +47,27 @@ app.put('/qa/question/:question_id/report', (req, res) => {
 
 // answer routes
 // get answers
-app.get('/qa/:question_id/answers', async (req, res) => {
-  // need to add in second get function for the answers_photos
-  console.log('question_id: ', req.params.question_id);
-  const count = req.params.count ? req.params.count : 5;
-  console.log('count: ', count);
-  const answersFound = await db.get(req.params.question_id, 'answers', count)
-  res.send(answersFound);
-});
+// app.get('/qa/:question_id/answers', async (req, res) => {
+//   // need try/catch block
+//   const count = req.params.count ? req.params.count : 5;
+//   try {
+//     const answersFound = await db.get(req.params.question_id, 'answers', count);
+//     answersFound.forEach(async (answer) => {
+//       answer.photos = [];
+//     });
+
+//     // db.get call for each answer to get photos for each
+//     for (let i = 0; i < answersFound.length; i++) {
+//       let photos = await db.get(answersFound[i].id, 'answers_photos', 5);
+//       answersFound[i].photos = photos;
+//     }
+//     res.send(answersFound);
+//   } catch {
+//     console.log('error in get answers');
+//     res.sendStatus(404);
+//   }
+//   // console.log('answers after photos arr added: ', answersFound);
+// });
 
 // create answer
 app.post('/qa/:question_id/answers', (req, res) => {

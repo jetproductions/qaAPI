@@ -1,19 +1,19 @@
+const dbQuestions = require('../DB/dbQuestions');
+const questions = {};
 
-const express = require('express');
-const questions = express.Router();
+questions.get = async (req, res) => {
+  console.log('product_id: ', req.params.product_id);
+  const count = req.params.count ? req.params.count : 5;
+  console.log('count: ', count);
+  const questionsFound = await dbQuestions.get(req.params.product_id, count);
+  res.send(questionsFound);
+},
+questions.post = () => {
 
-
-questions.get = ('/qa/:product_id',(req, res) => {
-  console.log('router is working');
-  res.status(200);
-});
-questions.post = ('/qa/:product_id/', (req, res) => {
-  res.sendStatus(201);
-});
-// TODO: not working yet 
-
-// ALL QUESTION ROUTES
-// read questions
+},
+questions.update = () => {
+  
+},
 
 
 module.exports = questions;
