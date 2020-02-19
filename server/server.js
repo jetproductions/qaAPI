@@ -17,23 +17,12 @@ app.use(bodyParser.json());
 // TODO: update functionality working
 // TODO: router files working to clean up code
 
-// question routes
+// QUESTION ROUTES
 // get questions
 app.get('/qa/:product_id', (req, res) => questions.get(req, res));
 
 // create question
-app.post('/qa/:product_id', async (req, res) => {
-  console.log('hit post route');
-  try {
-    const added = await dbQuestions.add(req.body);
-    console.log('added question res: ', added);
-    res.sendStatus(added);
-  }
-  catch {
-    console.log('error posting data');
-    res.sendStatus(404);
-  }
-});
+app.post('/qa/:product_id', (req, res) => questions.add(req, res));
 
 // update question helpful
 app.put('/qa/question/:question_id/helpful', async (req, res) => {
@@ -50,9 +39,7 @@ app.put('/qa/question/:question_id/report', (req, res) => {
 app.get('/qa/:question_id/answers', (req, res) => answers.get(req, res));
 
 // create answer
-app.post('/qa/:question_id/answers', (req, res) => {
-  res.sendStatus(201);
-});
+app.post('/qa/:question_id/answers', (req, res) => answers.post(req, res));
 
 // update answer helpful
 app.put('/qa/answer/:answer_id/helpful', (req, res) => {

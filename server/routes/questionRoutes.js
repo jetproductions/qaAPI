@@ -10,13 +10,13 @@ questions.get = async (req, res) => {
     console.error('error with getting questions');
     res.sendStatus(404);
   }
- 
 };
 
 questions.post = async (req, res) => {
   try {
     const added = await dbQuestions.add(req.body);
-    res.send(201, added);
+    console.log('added question res: ', added);
+    res.sendStatus(201);
   } catch {
     console.log('error with posting question');
     res.sendStatus(404);
@@ -24,7 +24,12 @@ questions.post = async (req, res) => {
 };
 
 questions.update = async (req, res) => {
-  
+  try {
+    // update to handle report and helpful endpoints
+    const updated = await dbQuestions.update(req.params.id)
+  } catch {
+    console.log(`error updating questions`);
+  }
 },
 
 
