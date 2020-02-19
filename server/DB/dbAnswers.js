@@ -4,6 +4,7 @@ const Setup = require('./setup');
 const Photos = require('./dbAnswerPhotos');
 
 // TODO: get needs to also get answers_photos for each photo
+// TODO: add neesd to check if photos and then add them if necessary
 
 const get = async (id, count) => {
   try {
@@ -18,23 +19,24 @@ const get = async (id, count) => {
 };
 
 const add = async (answer) => {
-  // this may be better as a Pool operation that then posts photos if needed
   const pool = new Pool(Setup);
-  const client = await pool.connect();
+  await pool.connect();
 
   try {
     const { question_id, body, answerer_name, answerer_email } = answer;
+    const { photos } = answer;
     let date = new Date();
     date = date.toISOString().split('T')[0];
-    await client.query('BEGIN');
+    // this can probably be streamlined
+    let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.answers');
+    id = id.rows[0]['?column?'] + 1;
     const queryText = {
-      text: 'INSERT INTO questions_answers.answers(question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5) RETURNING id',
-      values: [question_id, body, date, answerer_name, answerer_email],
-      // rowMode: 'array',
+      text: 'INSERT INTO questions_answers.answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [id, question_id, body, date, answerer_name, answerer_email],
     };
-    const res = await client.query(queryText);
-    console.log('answer in try: ', answer);
-    client.release();
+
+    const res = await pool.query(queryText);
+
     console.log('res for add answer: ', res.rows);
     return res;
   } catch {
