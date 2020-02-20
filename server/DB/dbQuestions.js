@@ -1,7 +1,9 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
 
 const Setup = require('./setup');
 
+// TODO: refactor get query to get answers associated with all questions
+// TODO: structure get data to Client expectations
 // TODO: refactor update functions into one
 
 const questions = {};
@@ -10,7 +12,12 @@ const pool = new Pool(Setup);
 // working just takes some time 
 questions.get = async (id, count = 5) => {
   pool.connect();
-  const res = await pool.query(`SELECT * FROM questions_answers.questions WHERE product_id=${id} LIMIT ${count}`);
+  const queryText = {
+    // question only query was: SELECT * FROM questions_answers.questions WHERE product_id= $1 LIMIT $2
+    text: 'SELECT * FROM questions_answers.questions WHERE product_id= $1 LEFT JOIN questions_answers.answers ON questions_answers.questions.id = answers.questions_id LIMIT $2',
+    values: [id, count]
+  }
+  const res = await pool.query(queryText);
   return res.rows;
 };
 
@@ -43,7 +50,6 @@ questions.add = async (req) => {
 };
 
 questions.helpful = async (id) => {
-  const pool = new Pool(Setup);
   await pool.connect();
   id = parseInt(id);
   
@@ -62,10 +68,8 @@ questions.helpful = async (id) => {
 };
 
 questions.report = async (id) => {
-  const pool = new Pool(Setup);
   await pool.connect();
-  // id = parseInt(id);
-  
+
   try {
     const queryText = {
       text: 'UPDATE questions_answers.questions SET reported = reported + 1 WHERE id = $1',

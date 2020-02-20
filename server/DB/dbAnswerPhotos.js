@@ -2,6 +2,8 @@ const { Pool, Client } = require('pg');
 
 const Setup = require('./setup');
 
+
+// TODO: double check that this file is necessary
 const answerPhotos = {};
 
 answerPhotos.get = async (id, count) => {

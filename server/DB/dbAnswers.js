@@ -1,9 +1,10 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
 
 const Setup = require('./setup');
-const Photos = require('./dbAnswerPhotos');
+// const Photos = require('./dbAnswerPhotos');
 
 // TODO: get needs to also get answers_photos for each photo
+// TODO: structure get data to Client expectations
 // TODO: add needs to check if photos and then add them if necessary
 // TODO: refactor report and helpful into 1 update function
 
@@ -14,6 +15,7 @@ answers.get = async (id, count) => {
   await pool.connect();
 
   try {
+    // don't know why this one template literal works and not others
     const res = await pool.query(`SELECT * FROM questions_answers.answers WHERE question_id=${id} LIMIT ${count}`);
     return res.rows;
   } catch {
@@ -28,6 +30,7 @@ answers.add = async (answer) => {
     const { question_id } = answer.params;
     const photos = answer.body.photos || [];
     const length = photos.length;
+
     let date = new Date();
     date = date.toISOString().split('T')[0];
     // this can probably be streamlined
