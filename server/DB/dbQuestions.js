@@ -13,9 +13,9 @@ const pool = new Pool(Setup);
 questions.get = async (id, count = 5) => {
   pool.connect();
   const queryText = {
-    // question only query was: SELECT * FROM questions_answers.questions WHERE product_id= $1 LIMIT $2
+    // question only query was: SELECT * FROM questions WHERE product_id= $1 LIMIT $2
     // query is written so should work - tested on Bailey's DB
-    text: 'SELECT * FROM questions_answers.questions JOIN questions_answers.answers ON questions.id = answers.question_id WHERE questions_answers.questions.product_id =$1  LIMIT $2',
+    text: 'SELECT * FROM questions JOIN answers ON questions.id = answers.question_id WHERE questions.product_id =$1  LIMIT $2',
     values: [id, count]
   }
   const res = await pool.query(queryText);
@@ -33,16 +33,15 @@ questions.add = async (req) => {
     date = date.toISOString().split('T')[0];
 
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.questions');
+    let id = await pool.query('SELECT MAX(id) + 1 FROM questions');
     id = id.rows[0]['?column?'] + 1;
 
     const queryText = {
-      text: 'INSERT INTO questions_answers.questions(id, product_id, question_body, question_date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
+      text: 'INSERT INTO questions(id, product_id, question_body, question_date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
       values: [id, product_id, body, date, asker_name, asker_email],
     };
     const res = await pool.query(queryText);
     console.log('res for add answer: ', res.rows);
-
     return res;
   } catch {
     console.log('error in questionDB.add');
@@ -56,7 +55,7 @@ questions.helpful = async (id) => {
   
   try {
     const queryText = {
-      text: 'UPDATE questions_answers.questions SET helpful = helpful + 1 WHERE id = $1',
+      text: 'UPDATE questions SET helpful = helpful + 1 WHERE id = $1',
       values: [id]
     }
     const res = await pool.query(queryText);
@@ -73,7 +72,7 @@ questions.report = async (id) => {
 
   try {
     const queryText = {
-      text: 'UPDATE questions_answers.questions SET reported = reported + 1 WHERE id = $1',
+      text: 'UPDATE questions SET reported = reported + 1 WHERE id = $1',
       values: [id]
     }
     const res = await pool.query(queryText);
