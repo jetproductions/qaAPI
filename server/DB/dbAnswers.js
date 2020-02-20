@@ -30,28 +30,33 @@ answers.add = async (answer) => {
     const { body, answerer_name, answerer_email } = answer.body;
     const { question_id } = answer.params;
     const photos = answer.body.photos || [];
-
     let date = new Date();
+    
     date = date.toISOString().split('T')[0];
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(answer_id) + 1 FROM answers');
+    let id = await pool.query('SELECT MAX(id) + 1 FROM answers');
+
     id = id.rows[0]['?column?'] + 1;
+
     const queryText = {
-      text: 'INSERT INTO answers(answer_id, question_id, answer_body, answer_date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)',
+      text: 'INSERT INTO answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)',
       values: [id, question_id, body, date, answerer_name, answerer_email]
     };
+    
     const res = await pool.query(queryText);
 
     if (photos.length > 0) {
       // refactor to allow for multiple insert values when needed
       console.log('hitting add photos if statement')
       photos.forEach( async (photo) => {
+        // const photoPool = await pool.connect();
         try {
-          let photoId = await pool.query('SELECT MAX(photo_id) + 1 FROM answers_photos');
+          let photoId = await pool.query('SELECT MAX(id) + 1 FROM answers_photos');
+          console.log('here');
           photoId = photoId.rows[0]['?column?'] !== null ?  photoId.rows[0]['?column?'] + 1 : 1;
           console.log('photoId: ', photoId);
           let photoQuery = {
-            text: 'INSERT INTO answers_photos(photo_id, answer_id, url) VALUES($1, $2, $3)',
+            text: 'INSERT INTO answers_photos(id, answer_id, url) VALUES($1, $2, $3)',
             values: [photoId, id, photo.url]
           }
           let addPhoto = await pool.query(photoQuery);
@@ -67,7 +72,7 @@ answers.add = async (answer) => {
   } catch {
     console.log('error in dbAnswers.add');
     return 'error';
-  }
+  } 
 };
 
 answers.helpful = async (id) => {
@@ -80,8 +85,7 @@ answers.helpful = async (id) => {
     }
     const res = await pool.query(queryText);
     return res;
-  }
-  catch {
+  } catch {
     console.log(`error in answersDB.report`);
     return 'error';
   }
@@ -98,8 +102,7 @@ answers.report = async (id) => {
     }
     const res = await pool.query(queryText);
     return res;
-  }
-  catch {
+  } catch {
     console.log(`error in answerDB.report`);
     return 'error';
   }

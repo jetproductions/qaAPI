@@ -33,37 +33,37 @@ CREATE TABLE answers_photos (
   url varchar(2000)
 );
 \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions1.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions4.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions5.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions6.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions7.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions8.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions9.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions10.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions11.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions12.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions4.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions5.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions6.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions7.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions8.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions9.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions10.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions11.csv' WITH DELIMITER ',' CSV HEADER;
+\copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions12.csv' WITH DELIMITER ',' CSV HEADER;
 
 \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers1.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers4.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers5.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers6.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers7.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers8.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers9.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers10.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers11.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers12.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers4.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers5.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers6.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers7.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers8.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers9.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers10.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers11.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Answers/answers12.csv' WITH DELIMITER ',' CSV HEADER;
 
 \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos1.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos4.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos5.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos6.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos7.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos8.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos9.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos10.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos11.csv' WITH DELIMITER ',' CSV HEADER;
--- \copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos12.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos4.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos5.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos6.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos7.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos8.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos9.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos10.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos11.csv' WITH DELIMITER ',' CSV HEADER;
+\copy answers_photos FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/AnswerPhotos/answers_photos12.csv' WITH DELIMITER ',' CSV HEADER;
 
 
 CREATE INDEX product_index ON questions(product_id);
