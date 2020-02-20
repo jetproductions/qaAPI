@@ -29,18 +29,34 @@ answers.add = async (answer) => {
     const { body, answerer_name, answerer_email } = answer.body;
     const { question_id } = answer.params;
     const photos = answer.body.photos || [];
-    const length = photos.length;
 
     let date = new Date();
     date = date.toISOString().split('T')[0];
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.answers');
+    let id = await pool.query('SELECT MAX(answer_id) + 1 FROM questions_answers.answers');
     id = id.rows[0]['?column?'] + 1;
     const queryText = {
-      text: 'INSERT INTO questions_answers.answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)',
+      text: 'INSERT INTO questions_answers.answers(answer_id, question_id, answer_body, answer_date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)',
       values: [id, question_id, body, date, answerer_name, answerer_email]
     };
     const res = await pool.query(queryText);
+    console.log('answerId: ', id);
+
+    // if (photos.length > 0) {
+    //   photos.forEach( (photo) => {
+    //     try {
+    //       let photoId = await pool.query('SELECT MAX(')
+    //       let photoQuery = {
+    //         text: 'INSERT INTO questions_answers.answers_photos(photo_id, answers_id, url) VALUES($1, $2, $3)',
+    //         values: [photo.id]
+    //       }
+    //       let addPhoto = 
+    //     } catch {
+    //       console.log('error inserting photos');
+    //       return 'error in photos';
+    //     }
+    //   });
+    // }
     return res;
   } catch {
     console.log('error in dbAnswers.add');
