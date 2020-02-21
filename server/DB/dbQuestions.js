@@ -12,9 +12,11 @@ const pool = new Pool(Setup);
 questions.get = async (id, count = 5) => {
   await pool.connect();
   // how to get count number of answers for each question in this query
+  const ansCount = count * 5;
   const queryText = {
-    text: 'SELECT * FROM questions q LEFT JOIN answers a ON q.id = a.question_id LEFT JOIN photos p ON a.id = p.answer_id WHERE q.product_id =$1  AND q.reported=0 ORDER BY q.helpful LIMIT $2 ',
-    values: [id, count]
+    // text: 'SELECT  FROM questions q LEFT JOIN answers ans ON q.id = ans.question_id LEFT JOIN photos p ON ans.id = p.answer_id WHERE q.product_id =$1  AND q.reported=0  ORDER BY q.helpful DESC LIMIT $2 ',
+    text: 'SELECT ans.id AS ans_id, ans.question_id, ans.body AS ans_body, q.body AS q_body  FROM answers ans RIGHT JOIN questions q ON ans.question_id = q.id WHERE ans.question_id IN (SELECT q.id FROM questions q WHERE q.product_id = $1 LIMIT $2) LIMIT $3',
+    values: [id, count, ansCount]
   };
   const res = await pool.query(queryText);
   return res.rows;
