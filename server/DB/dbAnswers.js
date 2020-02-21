@@ -15,11 +15,11 @@ answers.get = async (id, count = 5) => {
   await pool.connect();
   try {
     const queryText = {
-      text: 'SELECT * FROM answers JOIN photos ON answers.id = photos.answer_id WHERE answers.question_id =$1  LIMIT $2',
+      text: 'SELECT p.id AS photo_id, p.url AS url, ans.id AS id, body, a_name AS name,  FROM photos p RIGHT JOIN answers ans ON p.answer_id = ans.id WHERE ans.question_id IN (SELECT ans.id FROM answers ans WHERE ans.question_id = $1 LIMIT $2) ORDER BY ans.helpful DESC LIMIT 4',
       values: [id, count]
     };
     const res = await pool.query(queryText);
-    console.log(res.rows[0]);
+    console.log(res.rows);
     return res.rows;
   } catch {
     console.log('error in dbAnswers.get');
