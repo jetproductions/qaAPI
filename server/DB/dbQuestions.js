@@ -20,24 +20,16 @@ questions.get = async (id, count = 5) => {
       values: [id, count, ansCount]
     };
     const res = await pool.query(queryText);
-    // desctructure rows and format for client into proper form
     let results = [];
-
     res.rows.forEach((row) => {
       let exists = -1;
-      // results.findIndex((result) => result.result )
-      console.log('row: ', row.question_id);
-
       if (results.length > 0) {
         results.forEach((result, i) => {
           if (result.question_id === row.question_id) {
-            console.log('index: ', i);
             exists = i;
           }
         });
       }
-        
-
       const { ans_id, ans_body, answerer_name, ans_date, helpfulness } = row;
       const answer = {
         id: ans_id,
@@ -50,8 +42,6 @@ questions.get = async (id, count = 5) => {
       }
 
       if (exists !== -1) {
-        console.log('structured: ', results.length, ' exists: ', exists);
-
         results[exists].answers[ans_id] = answer;
       } else {
         const { q_body, question_id, question_helpfulness, q_date, asker_name } = row;
@@ -64,7 +54,6 @@ questions.get = async (id, count = 5) => {
           answers: {}
         }
         question.answers[ans_id] = answer;
-        console.log('here ', question);
         results = results.concat(...results, question);
       }
     });
