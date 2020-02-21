@@ -9,15 +9,36 @@ const Setup = require('./setup');
 const questions = {};
 const pool = new Pool(Setup);
 
-// working just takes some time when use SELECT not JOIN string
 questions.get = async (id, count = 5) => {
   await pool.connect();
+  // how to get count number of answers for each question in this query
   const queryText = {
-    text: 'SELECT * FROM questions JOIN answers ON questions.id = answers.question_id WHERE questions.product_id =$1  LIMIT $2',
+    text: 'SELECT * FROM questions q LEFT JOIN answers a ON q.id = a.question_id LEFT JOIN photos p ON a.id = p.answer_id WHERE q.product_id =$1  AND q.reported=0 ORDER BY q.helpful LIMIT $2 ',
     values: [id, count]
-  }
+  };
   const res = await pool.query(queryText);
   return res.rows;
+};
+const example = {
+  "product_id": "5",
+  "results": [{
+    "question_id": 37,
+    "question_body": "Why is this product cheaper here than other sites?",
+    "question_date": "2018-10-18T00:00:00.000Z",
+    "asker_name": "williamsmith",
+    "question_helpfulness": 4,
+    "reported": 0,
+    "answers": {
+      68: {
+        "id": 68,
+        "body": "We are selling it here without any markup from the middleman!",
+        "date": "2018-08-18T00:00:00.000Z",
+        "answerer_name": "Seller",
+        "helpfulness": 4,
+        "photos": []
+      }
+    }
+  }]
 };
 
 questions.add = async (req) => {
@@ -65,6 +86,7 @@ questions.helpful = async (id) => {
   }
 };
 
+// should report be a delete function?
 questions.report = async (id) => {
   await pool.connect();
 
@@ -75,8 +97,7 @@ questions.report = async (id) => {
     }
     const res = await pool.query(queryText);
     return res;
-  }
-  catch {
+  } catch {
     console.log(`error in questionDB.report`);
     return 'error';
   }

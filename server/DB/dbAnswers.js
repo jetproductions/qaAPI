@@ -15,7 +15,7 @@ answers.get = async (id, count = 5) => {
   await pool.connect();
   try {
     const queryText = {
-      text: 'SELECT * FROM answers JOIN answers_photos ON answers.id = answers_photos.answer_id WHERE answers.question_id =$1  LIMIT $2',
+      text: 'SELECT * FROM answers JOIN photos ON answers.id = photos.answer_id WHERE answers.question_id =$1  LIMIT $2',
       values: [id, count]
     };
     const res = await pool.query(queryText);
@@ -48,9 +48,9 @@ answers.add = async (answer) => {
     const res = await pool.query(queryText);
 
     if (photos.length > 0) {
-      let photoQuery = `INSERT INTO answers_photos(id, answer_id, url) VALUES`;
+      let photoQuery = `INSERT INTO photos(id, answer_id, url) VALUES`;
       try {
-        let photoId = await pool.query('SELECT MAX(id) + 1 FROM answers_photos');
+        let photoId = await pool.query('SELECT MAX(id) + 1 FROM photos');
         photoId = photoId.rows[0]['?column?'] !== null ?  photoId.rows[0]['?column?'] + 1 : 1;
         photos.forEach((photo, i) => {
           let unique = photoId + i;

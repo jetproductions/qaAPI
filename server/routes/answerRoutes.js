@@ -1,15 +1,13 @@
 const dbAnswers = require('../DB/dbAnswers');
 
-// TODO: post route working for answers hitting route with post
+// TODO:
 const answers = {};
 
 answers.get = async (req, res) => {
   try {
-    // console.log('req.params.count: ', req.params.count);
     const count = req.params.count ? req.params.count : 5;
     const answersFound = await dbAnswers.get(req.params.question_id, count);
     answersFound ? res.send(answersFound) : res.sendStatus(404);
-    
   } catch {
     console.error('error getting answers');
     res.sendStatus(404);

@@ -10,7 +10,7 @@ answerPhotos.get = async (id, count) => {
   const pool = new Client(Setup);
   await pool.connect();
   try {
-    const res = await client.query(`SELECT * FROM questions_answers.answers_photos WHERE answer_id=${id} LIMIT ${count}`);
+    const res = await client.query(`SELECT * FROM photos WHERE answer_id=${id} LIMIT ${count}`);
     return res.rows;
   } catch {
     console.log('error in dbAnswers.get');
@@ -25,10 +25,10 @@ answerPhotos.add = async (answer) => {
   try {
     const { photos, answer_id } = answers;
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM questions_answers.answers_photos');
+    let id = await pool.query('SELECT MAX(id) + 1 FROM photos');
     id = id.rows[0]['?column?'] + 1;
     const queryText = {
-      text: 'INSERT INTO questions_answers.answers_photos(id, answers_id, url) VALUES($1, $2, $3) RETURNING id',
+      text: 'INSERT INTO photos(id, answer_id, url) VALUES($1, $2, $3) RETURNING id',
       values: [id, answer_id, url],
     };
     const res = await pool.query(queryText);
