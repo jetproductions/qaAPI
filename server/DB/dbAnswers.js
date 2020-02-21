@@ -48,25 +48,19 @@ answers.add = async (answer) => {
     const res = await pool.query(queryText);
 
     if (photos.length > 0) {
-      // refactor to allow for multiple insert values when needed through template literal for photoQuery
-      
-      photos.forEach( async (photo) => {
-        try {
-          let photoId = await pool.query('SELECT MAX(id) + 1 FROM answers_photos');
-          photoId = photoId.rows[0]['?column?'] !== null ?  photoId.rows[0]['?column?'] + 1 : 1;
-          console.log('photoId: ', photoId);
-          let photoQuery = {
-            text: 'INSERT INTO answers_photos(id, answer_id, url) VALUES($1, $2, $3)',
-            values: [photoId, id, photo.url]
-          }
-          let addPhoto = await pool.query(photoQuery);
-          console.log('addPhoto: ', addPhoto);
-          return addPhoto ? addPhoto : 'error';
-        } catch {
-          console.log('error inserting photos');
-          return 'error in photos';
-        }
-      });
+      let photoQuery = `INSERT INTO answers_photos(id, answer_id, url) VALUES`;
+      try {
+        let photoId = await pool.query('SELECT MAX(id) + 1 FROM answers_photos');
+        photoId = photoId.rows[0]['?column?'] !== null ?  photoId.rows[0]['?column?'] + 1 : 1;
+        photos.forEach((photo, i) => {
+          let unique = photoId + i;
+          photoQuery.concat(`(${unique}, ${id}, '${photo.url}')`);
+          i === photos.length - 1 ? null : photoQuery.concat(',');
+        });
+      } catch {
+        console.log('error inserting photos');
+        return 'error in photos';
+      }
     }
     return res;
   } catch {
