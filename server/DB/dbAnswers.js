@@ -15,12 +15,49 @@ answers.get = async (id, count = 5) => {
   await pool.connect();
   try {
     const queryText = {
-      text: 'SELECT p.id AS photo_id, p.url AS url, ans.id AS id, body, a_name AS name,  FROM photos p RIGHT JOIN answers ans ON p.answer_id = ans.id WHERE ans.question_id IN (SELECT ans.id FROM answers ans WHERE ans.question_id = $1 LIMIT $2) ORDER BY ans.helpful DESC LIMIT 4',
+      text: 'SELECT p.id AS photo_id, p.link AS url, ans.id AS id, body, answerer_name, date_written AS date, helpful AS helpfulness  FROM photos p RIGHT JOIN answers ans ON p.answer_id = ans.id WHERE ans.question_id IN (SELECT ans.id FROM answers ans WHERE ans.question_id = $1 LIMIT $2) LIMIT 4',
       values: [id, count]
     };
     const res = await pool.query(queryText);
-    console.log(res.rows);
-    return res.rows;
+    console.log('rows: ', res.rows);
+    let results = [];
+    res.rows.forEach((row) => {
+      let exists = -1;
+      if (results.length > 0) {
+        results.forEach((result, i) => {
+          if (result.answer_id === row.id) {
+            exists = i;
+          }
+        });
+      }
+      const { photo_id, url } = row;
+      let photo;
+      photo_id === null ? photo = null : photo = {id: photo_id, url};
+      
+      if (exists !== -1) {
+        results[exists].photos.push(photo);
+      } else {
+        const { id, body, answerer_name, date, helpfulness } = row;
+        const answer = {
+          answer_id: id,
+          body,
+          answerer_name,
+          date,
+          helpfulness,
+          photos: []
+        };
+        photo ===  null ? null : answer.photos.push(photo);
+        results = results.concat(...results, answer);
+      }
+
+    });
+    const structured = {
+      question: id.toString(),
+      page: 0,
+      count,
+      results
+    };
+    return structured;
   } catch {
     console.log('error in dbAnswers.get');
   }

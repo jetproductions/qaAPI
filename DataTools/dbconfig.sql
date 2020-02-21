@@ -30,7 +30,7 @@ CREATE TABLE answers(
 CREATE TABLE photos (
   id SERIAL PRIMARY KEY NOT NULL,
   answer_id INT REFERENCES answers(id),
-  url varchar(2000)
+  link varchar(2000)
 );
 \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions1.csv' WITH DELIMITER ',' CSV HEADER;
 \copy questions FROM '~et/documents/hack-rxr-07/sdc/qaapi/csv/Questions/questions4.csv' WITH DELIMITER ',' CSV HEADER;
