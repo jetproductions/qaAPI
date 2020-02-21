@@ -8,7 +8,8 @@ answers.get = async (req, res) => {
     // console.log('req.params.count: ', req.params.count);
     const count = req.params.count ? req.params.count : 5;
     const answersFound = await dbAnswers.get(req.params.question_id, count);
-    res.send(answersFound);
+    answersFound ? res.send(answersFound) : res.sendStatus(404);
+    
   } catch {
     console.error('error getting answers');
     res.sendStatus(404);

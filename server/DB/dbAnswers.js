@@ -5,19 +5,21 @@ const Setup = require('./setup');
 
 // TODO: get needs to also get answers_photos for each photo
 // TODO: structure get data to Client expectations
-// TODO: add needs to check if photos and then add them if necessary
 // TODO: refactor report and helpful into 1 update function
 // TODO: refactor add photos to only need 1 query to insert all
 
 const answers = {};
 const pool = new Pool(Setup);
 
-answers.get = async (id, count) => {
+answers.get = async (id, count = 5) => {
   await pool.connect();
-
   try {
-    // don't know why this one template literal works and not others
-    const res = await pool.query(`SELECT * FROM answers WHERE question_id=${id} LIMIT ${count}`);
+    const queryText = {
+      text: 'SELECT * FROM answers JOIN answers_photos ON answers.id = answers_photos.answer_id WHERE answers.question_id =$1  LIMIT $2',
+      values: [id, count]
+    };
+    const res = await pool.query(queryText);
+    console.log(res.rows[0]);
     return res.rows;
   } catch {
     console.log('error in dbAnswers.get');
@@ -39,20 +41,18 @@ answers.add = async (answer) => {
     id = id.rows[0]['?column?'] + 1;
 
     const queryText = {
-      text: 'INSERT INTO answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)',
+      text: `INSERT INTO answers(id, question_id, body, date_written, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5, $6)`,
       values: [id, question_id, body, date, answerer_name, answerer_email]
     };
     
     const res = await pool.query(queryText);
 
     if (photos.length > 0) {
-      // refactor to allow for multiple insert values when needed
-      console.log('hitting add photos if statement')
+      // refactor to allow for multiple insert values when needed through template literal for photoQuery
+      
       photos.forEach( async (photo) => {
-        // const photoPool = await pool.connect();
         try {
           let photoId = await pool.query('SELECT MAX(id) + 1 FROM answers_photos');
-          console.log('here');
           photoId = photoId.rows[0]['?column?'] !== null ?  photoId.rows[0]['?column?'] + 1 : 1;
           console.log('photoId: ', photoId);
           let photoQuery = {

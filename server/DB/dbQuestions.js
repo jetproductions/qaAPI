@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 
 const Setup = require('./setup');
 
-// TODO: refactor get query to get answers associated with all questions using JOIN
+// TODO: refactor get query to get 5 answers associated with each question
 // TODO: structure get data to Client expectations
 // TODO: refactor update functions into one
 
@@ -11,10 +11,8 @@ const pool = new Pool(Setup);
 
 // working just takes some time when use SELECT not JOIN string
 questions.get = async (id, count = 5) => {
-  pool.connect();
+  await pool.connect();
   const queryText = {
-    // question only query was: SELECT * FROM questions WHERE product_id= $1 LIMIT $2
-    // query is written so should work - tested on Bailey's DB
     text: 'SELECT * FROM questions JOIN answers ON questions.id = answers.question_id WHERE questions.product_id =$1  LIMIT $2',
     values: [id, count]
   }

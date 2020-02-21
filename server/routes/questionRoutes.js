@@ -1,6 +1,7 @@
 const dbQuestions = require('../DB/dbQuestions');
 
-const questions = {}
+const questions = {};
+
 questions.get = async (req, res) => {
   try {
     const count = req.params.count ? req.params.count : 5;
