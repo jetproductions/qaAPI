@@ -1,8 +1,7 @@
-const nr = require('newrelic/newrelic');
+const nr = require('newrelic');
 const express = require('express');
 const app = express();
-// const questions = require('./routes/questionRoutes');
-// const answers = require('./routes/answerRoutes');
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
