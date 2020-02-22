@@ -19,7 +19,6 @@ answers.get = async (id, count = 5) => {
       values: [id, count]
     };
     const res = await pool.query(queryText);
-    console.log('rows: ', res.rows);
     let results = [];
     res.rows.forEach((row) => {
       let exists = -1;
