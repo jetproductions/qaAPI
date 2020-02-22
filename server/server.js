@@ -1,3 +1,4 @@
+const nr = require('newrelic/newrelic');
 const express = require('express');
 const app = express();
 // const questions = require('./routes/questionRoutes');

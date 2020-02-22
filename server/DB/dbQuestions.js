@@ -66,13 +66,10 @@ questions.get = async (id, count = 5) => {
     res.rows.forEach((row) => {
       const { photo_id, url, ans_id, question_id } = row;
       const photo = photo_id !== null ? { id: photo_id, url } : null;
-      console.log('photo: ', photo, 'questionId: ', question_id);
       if (photo === null) return;
       let index = results.findIndex((element) => element.question_id === question_id);
-      console.log('index: ', index);
       if (index === -1) return;
       let location = results[index].answers[ans_id].photos;
-      console.log('location: ', location);
       if (location.length === 0) {
         location.push(photo);
       } else {
