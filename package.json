@@ -4,7 +4,11 @@
   "description": "API for the QA section of Project Greenfield",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server/server.js",
+    "populate": "psql -U postgres <~et/documents/hack-rxr-07/sdc/qaapi/dataTools/dbconfig.sql",
+    "generate-answers": "node ./DataTools/Generators/answerDataGenerator.js",
+    "generate-photos": "node ./DataTools/Generators/photoDataGenerator.js",
+    "generate-questions": "node ./DataTools/Generators/questionDataGenerator.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +22,17 @@
   },
   "homepage": "https://github.com/jetproductions/qaAPI#readme",
   "dependencies": {
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
+    "json": "^9.0.6",
     "node": "^13.8.0",
+    "pg": "^7.18.1",
+    "pg-hstore": "^2.3.3",
     "postgres": "^1.0.2",
-    "slonik": "^22.4.0"
+    "sequelize": "^5.21.4",
+    "slonik": "^22.4.3"
   }
 }
