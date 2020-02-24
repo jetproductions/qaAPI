@@ -1,0 +1,102 @@
+config:
+  target: 'http://localhost:3000'
+  plugins:
+    expect: {}
+  http:
+    timout: 10
+  phases:
+    # Warm Up
+    - duration: 10
+      arrivalRate: 1
+    # # Ramp Up
+    - duration: 30
+      arrivalRate: 10
+    # # Cruising
+    - duration: 200
+      arrivalRate: 100
+    # Near Crash
+    - duration: 45
+      arrivalRate: 250
+    # Crash
+    # - duration: 60
+    #   arrivalRate: 1000
+
+  processor: "./DataTools/Generators/StressTestVariable.js"
+scenarios:
+  - name: "Get Questions"
+    flow:
+      - function: "variableGenerator"
+      - get:
+          url: "/qa/{{ qid }}/"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: results
+      
+  - name: "Get Answers"
+    flow: 
+      - function: "variableGenerator"
+      - get:
+          url: "/qa/{{ aid }}/answers/"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: results
+
+  - name: "Post Question"
+    flow:
+      - function: "variableGenerator"
+      - post:
+          url: "/qa/{{ qid }}/"
+          headers: "'Content-Type': 'application/json'"
+          json:
+            body: "{{ body }}"
+            asker_name: "{{ name }}"
+            asker_email: "{{ email }}"
+          expect:
+            - statusCode: 201
+
+  - name: "Post Answer"
+    flow:
+      - function: "variableGenerator"
+      - post:
+          url: "/qa/{{ aid }}/answers/"
+          json:
+            body: "{{ body }}"
+            answerer_name: "{{ name }}"
+            asker_email: "{{ email }}"
+          expect:
+            - statusCode: 201
+
+  - name: "Helpful Answer"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/answer/{{ aid }}/helpful/"
+          expect:
+            - statusCode: 204
+
+  - name: "Helpful Question"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/question/{{ qid }}/helpful"
+          expect:
+            - statusCode: 204
+
+  - name: "Report Question"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/question/{{ qid }}/report"
+          expect:
+            - statusCode: 204
+  - name: "Report Answer"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/answer/{{ aid }}/report"
+          expect:
+            - statusCode: 204
+  
+  

@@ -8,9 +8,11 @@ const answerPhotos = {};
 
 answerPhotos.get = async (id, count) => {
   const pool = new Client(Setup);
-  await pool.connect();
+  const client = await pool.connect();
+
   try {
     const res = await client.query(`SELECT * FROM photos WHERE answer_id=${id} LIMIT ${count}`);
+    await client.release();
     return res.rows;
   } catch {
     console.log('error in dbAnswers.get');
@@ -20,7 +22,7 @@ answerPhotos.get = async (id, count) => {
 // need to structure to run for every photo
 answerPhotos.add = async (answer) => {
   const pool = new Pool(Setup);
-  await pool.connect();
+  const client = await pool.connect();
 
   try {
     const { photos, answer_id } = answers;
@@ -31,7 +33,8 @@ answerPhotos.add = async (answer) => {
       text: 'INSERT INTO photos(id, answer_id, url) VALUES($1, $2, $3) RETURNING id',
       values: [id, answer_id, url],
     };
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
     return res;
   } catch {
     console.log('error in dbAnswers.add');

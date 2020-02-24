@@ -12,13 +12,15 @@ const answers = {};
 const pool = new Pool(Setup);
 
 answers.get = async (id, count = 5) => {
-  await pool.connect();
+  const client = await pool.connect();
   try {
     const queryText = {
       text: 'SELECT p.id AS photo_id, p.link AS url, ans.id AS id, body, answerer_name, date_written AS date, helpful AS helpfulness  FROM photos p RIGHT JOIN answers ans ON p.answer_id = ans.id WHERE ans.question_id IN (SELECT ans.id FROM answers ans WHERE ans.question_id = $1 LIMIT $2) LIMIT 4',
       values: [id, count]
     };
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
+
     let results = [];
     res.rows.forEach((row) => {
       let exists = -1;
@@ -63,7 +65,7 @@ answers.get = async (id, count = 5) => {
 };
 
 answers.add = async (answer) => {
-  await pool.connect();
+  const client = await pool.connect();
   try {
     const { body, answerer_name, answerer_email } = answer.body;
     const { question_id } = answer.params;
@@ -72,7 +74,7 @@ answers.add = async (answer) => {
     
     date = date.toISOString().split('T')[0];
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM answers');
+    let id = await client.query('SELECT MAX(id) + 1 FROM answers');
 
     id = id.rows[0]['?column?'] + 1;
 
@@ -81,7 +83,8 @@ answers.add = async (answer) => {
       values: [id, question_id, body, date, answerer_name, answerer_email]
     };
     
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
 
     if (photos.length > 0) {
       let photoQuery = `INSERT INTO photos(id, answer_id, url) VALUES`;
@@ -106,14 +109,15 @@ answers.add = async (answer) => {
 };
 
 answers.helpful = async (id) => {
-  await pool.connect();
+  const client = await pool.connect();
   
   try {
     const queryText = {
       text: 'UPDATE answers SET helpful = helpful + 1 WHERE id = $1',
       values: [id]
     }
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    client.release();
     return res;
   } catch {
     console.log(`error in answersDB.report`);
@@ -122,15 +126,15 @@ answers.helpful = async (id) => {
 };
 
 answers.report = async (id) => {
-  // const pool = new Pool(Setup);
-  await pool.connect();
+  const client = await pool.connect();
   
   try {
     const queryText = {
       text: 'UPDATE answers SET reported = reported + 1 WHERE id = $1',
       values: [id]
     }
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    client.release();
     return res;
   } catch {
     console.log(`error in answerDB.report`);

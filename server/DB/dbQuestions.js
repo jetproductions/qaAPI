@@ -10,7 +10,7 @@ const questions = {};
 const pool = new Pool(Setup);
 
 questions.get = async (id, count = 5) => {
-  await pool.connect();
+  const client = await pool.connect();
   try { 
     const ansCount = count * 5;
     const queryText = {
@@ -26,8 +26,8 @@ questions.get = async (id, count = 5) => {
       values: [id, ansCount, count]
     };
 
-    const res = await pool.query(queryText);
-
+    const res = await client.query(queryText);
+    await client.release();
     let results = [];
 
     res.rows.forEach((row) => {
@@ -66,13 +66,10 @@ questions.get = async (id, count = 5) => {
     res.rows.forEach((row) => {
       const { photo_id, url, ans_id, question_id } = row;
       const photo = photo_id !== null ? { id: photo_id, url } : null;
-      console.log('photo: ', photo, 'questionId: ', question_id);
       if (photo === null) return;
       let index = results.findIndex((element) => element.question_id === question_id);
-      console.log('index: ', index);
       if (index === -1) return;
       let location = results[index].answers[ans_id].photos;
-      console.log('location: ', location);
       if (location.length === 0) {
         location.push(photo);
       } else {
@@ -84,6 +81,7 @@ questions.get = async (id, count = 5) => {
       product_id: id,
       results,
     }
+
     return structured;
   } catch {
     console.log('error in dbQuestions.get');
@@ -92,7 +90,7 @@ questions.get = async (id, count = 5) => {
 };
 
 questions.add = async (req) => {
-  await pool.connect();
+  const client = await pool.connect();
 
   try {
     const { product_id } = req.params;
@@ -102,15 +100,15 @@ questions.add = async (req) => {
     date = date.toISOString().split('T')[0];
 
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM questions');
+    let id = await client.query('SELECT MAX(id) + 1 FROM questions');
     id = id.rows[0]['?column?'] + 1;
 
     const queryText = {
-      text: 'INSERT INTO questions(id, product_id, question_body, question_date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
+      text: 'INSERT INTO questions(id, product_id, body, date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
       values: [id, product_id, body, date, asker_name, asker_email],
     };
-    const res = await pool.query(queryText);
-    console.log('res for add answer: ', res.rows);
+    const res = await client.query(queryText);
+    await client.release();
     return res;
   } catch {
     console.log('error in questionDB.add');
@@ -119,7 +117,7 @@ questions.add = async (req) => {
 };
 
 questions.helpful = async (id) => {
-  await pool.connect();
+  const client = await pool.connect();
   id = parseInt(id);
   
   try {
@@ -127,7 +125,8 @@ questions.helpful = async (id) => {
       text: 'UPDATE questions SET helpful = helpful + 1 WHERE id = $1',
       values: [id]
     }
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
     return res;
   }
   catch {
@@ -138,14 +137,15 @@ questions.helpful = async (id) => {
 
 // should report be a delete function?
 questions.report = async (id) => {
-  await pool.connect();
+  const client = await pool.connect();
 
   try {
     const queryText = {
       text: 'UPDATE questions SET reported = reported + 1 WHERE id = $1',
       values: [id]
     }
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
     return res;
   } catch {
     console.log(`error in questionDB.report`);
@@ -154,9 +154,3 @@ questions.report = async (id) => {
 };
 
 module.exports = questions;
-
-
-// might be better to:
-// separate questions to results obj
-// separate answers to questions
-// separate photos to answers
