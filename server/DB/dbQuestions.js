@@ -100,15 +100,14 @@ questions.add = async (req) => {
     date = date.toISOString().split('T')[0];
 
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM questions');
+    let id = await client.query('SELECT MAX(id) + 1 FROM questions');
     id = id.rows[0]['?column?'] + 1;
 
     const queryText = {
-      text: 'INSERT INTO questions(id, product_id, question_body, question_date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
+      text: 'INSERT INTO questions(id, product_id, body, date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
       values: [id, product_id, body, date, asker_name, asker_email],
     };
     const res = await client.query(queryText);
-    console.log('res for add answer: ', res.rows);
     await client.release();
     return res;
   } catch {

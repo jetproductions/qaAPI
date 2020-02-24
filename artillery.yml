@@ -6,43 +6,39 @@ config:
     # Warm Up
     - duration: 10
       arrivalRate: 1
-    # # Below will need adjusting 
     # # Ramp Up
-    # - duration: 30
-    #   arrivalRate: 10
+    - duration: 30
+      arrivalRate: 10
     # # Cruising
-    # - duration: 30
-    #   arrivalRate: 20
+    - duration: 200
+      arrivalRate: 900
     # Crash
     # - duration: 60
-    #   arrivalRate: 2000
+    #   arrivalRate: 1000
 
   processor: "./DataTools/Generators/StressTestVariable.js"
 scenarios:
-  # - name: "Get Questions"
-  #   flow:
-  #     - function: "variableGenerator"
-  #     - get:
-  #         url: "/qa/{{ qid }}/"
+  - name: "Get Questions"
+    flow:
+      - function: "variableGenerator"
+      - get:
+          url: "/qa/{{ qid }}/"
       
-  # - name: "Get Answers"
-  #   flow: 
-  #     - function: "variableGenerator"
-  #     - get:
-  #         url: "/qa/{{ aid }}/answers/"
-  # - name: "Post Question"
-  #   flow:
-  #     - log: "New Question Poster"
-  #     - function: "variableGenerator"
-  #     - post:
-  #         url: "/qa/{{ qid }}/"
-  #         headers: "'Content-Type': 'application/json'"
-  #         json:
-  #           body: "{{ body }}"
-  #           asker_name: "{{ name }}"
-  #           asker_email: "{{ email }}"
-  #     - log: "{{ body }}, {{ name }}, {{ email}}"
-      # - log: "Sent POST request to /qa/{{ qid }}/"
+  - name: "Get Answers"
+    flow: 
+      - function: "variableGenerator"
+      - get:
+          url: "/qa/{{ aid }}/answers/"
+  - name: "Post Question"
+    flow:
+      - function: "variableGenerator"
+      - post:
+          url: "/qa/{{ qid }}/"
+          headers: "'Content-Type': 'application/json'"
+          json:
+            body: "{{ body }}"
+            asker_name: "{{ name }}"
+            asker_email: "{{ email }}"
   - name: "Post Answer"
     flow:
       - function: "variableGenerator"
@@ -52,5 +48,25 @@ scenarios:
             body: "{{ body }}"
             answerer_name: "{{ name }}"
             asker_email: "{{ email }}"
-
-
+  - name: "Helpful Answer"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/answer/{{ aid }}/helpful/"
+  - name: "Helpful Question"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/question/{{ qid }}/helpful"
+  - name: "Report Question"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/question/{{ qid }}/report"
+  - name: "Report Answer"
+    flow:
+      - function: "variableGenerator"
+      - put:
+          url: "/qa/answer/{{ aid }}/report"
+  
+  

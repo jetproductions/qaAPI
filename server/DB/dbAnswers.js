@@ -74,7 +74,7 @@ answers.add = async (answer) => {
     
     date = date.toISOString().split('T')[0];
     // this can probably be streamlined
-    let id = await pool.query('SELECT MAX(id) + 1 FROM answers');
+    let id = await client.query('SELECT MAX(id) + 1 FROM answers');
 
     id = id.rows[0]['?column?'] + 1;
 
