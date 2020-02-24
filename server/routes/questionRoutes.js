@@ -16,7 +16,6 @@ questions.get = async (req, res) => {
 questions.add = async (req, res) => {
   try {
     const added = await dbQuestions.add(req);
-    console.log('added question res: ', added);
     return added !== 'error' ? res.sendStatus(201) : res.sendStatus(404);
   } catch {
     console.log('error with posting question');

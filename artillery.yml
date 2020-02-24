@@ -1,59 +1,56 @@
 config:
   target: 'http://localhost:3000'
+  http:
+    timout: 10
   phases:
     # Warm Up
-    - duration: 60
+    - duration: 10
       arrivalRate: 1
-    # Below will need adjusting 
-    # Ramp Up
+    # # Below will need adjusting 
+    # # Ramp Up
     # - duration: 30
     #   arrivalRate: 10
-    # Cruising
-    # - duration: 300
-        # arrivalRate: 20
+    # # Cruising
+    # - duration: 30
+    #   arrivalRate: 20
     # Crash
     # - duration: 60
-    #   arrivalRate: 200
+    #   arrivalRate: 2000
 
   processor: "./DataTools/Generators/StressTestVariable.js"
 scenarios:
-  - name: "Get Questions"
-    flow:
-      - log: "New Question Getter"
-      - function: "variableGenerator"
-      - get:
-          url: "/qa/{{ qid }}"
-      - log: "Sent a GET request to /qa with product id {{ qid }}"
+  # - name: "Get Questions"
+  #   flow:
+  #     - function: "variableGenerator"
+  #     - get:
+  #         url: "/qa/{{ qid }}/"
       
   # - name: "Get Answers"
   #   flow: 
-  #     - log: "New Answer Getter"
   #     - function: "variableGenerator"
-  #     - think: 2
   #     - get:
-  #         url: "/qa/{{ aid }}/answers"
-  #     - log: "Sent a GET request to /qa/{{ aid }}/answers "
+  #         url: "/qa/{{ aid }}/answers/"
   # - name: "Post Question"
   #   flow:
   #     - log: "New Question Poster"
   #     - function: "variableGenerator"
-  #     - think: 2
   #     - post:
-  #         url: "/qa/{{ qid }}"
+  #         url: "/qa/{{ qid }}/"
+  #         headers: "'Content-Type': 'application/json'"
   #         json:
   #           body: "{{ body }}"
   #           asker_name: "{{ name }}"
   #           asker_email: "{{ email }}"
-  #     - log: "Sent POST request to /qa/{{ qid }}"
-  # - name: "Post Answer"
-  #   flow:
-  #     - log: "New Answer Poster"
-  #     - function: "variableGenerator"
-  #     - post:
-  #         url: "/qa/{{ aid }}/answers"
-  #         json:
-  #           body: "{{ body }}"
-  #           answerer_name: "{{ name }}"
-  #           asker_email: "{{ email }}"
+  #     - log: "{{ body }}, {{ name }}, {{ email}}"
+      # - log: "Sent POST request to /qa/{{ qid }}/"
+  - name: "Post Answer"
+    flow:
+      - function: "variableGenerator"
+      - post:
+          url: "/qa/{{ aid }}/answers/"
+          json:
+            body: "{{ body }}"
+            answerer_name: "{{ name }}"
+            asker_email: "{{ email }}"
 
 

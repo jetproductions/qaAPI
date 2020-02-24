@@ -10,7 +10,7 @@ const questions = {};
 const pool = new Pool(Setup);
 
 questions.get = async (id, count = 5) => {
-  await pool.connect();
+  const client = await pool.connect();
   try { 
     const ansCount = count * 5;
     const queryText = {
@@ -26,8 +26,8 @@ questions.get = async (id, count = 5) => {
       values: [id, ansCount, count]
     };
 
-    const res = await pool.query(queryText);
-
+    const res = await client.query(queryText);
+    await client.release();
     let results = [];
 
     res.rows.forEach((row) => {
@@ -81,6 +81,7 @@ questions.get = async (id, count = 5) => {
       product_id: id,
       results,
     }
+
     return structured;
   } catch {
     console.log('error in dbQuestions.get');
@@ -89,7 +90,7 @@ questions.get = async (id, count = 5) => {
 };
 
 questions.add = async (req) => {
-  await pool.connect();
+  const client = await pool.connect();
 
   try {
     const { product_id } = req.params;
@@ -106,8 +107,9 @@ questions.add = async (req) => {
       text: 'INSERT INTO questions(id, product_id, question_body, question_date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5, $6)',
       values: [id, product_id, body, date, asker_name, asker_email],
     };
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
     console.log('res for add answer: ', res.rows);
+    await client.release();
     return res;
   } catch {
     console.log('error in questionDB.add');
@@ -116,7 +118,7 @@ questions.add = async (req) => {
 };
 
 questions.helpful = async (id) => {
-  await pool.connect();
+  const client = await pool.connect();
   id = parseInt(id);
   
   try {
@@ -124,7 +126,8 @@ questions.helpful = async (id) => {
       text: 'UPDATE questions SET helpful = helpful + 1 WHERE id = $1',
       values: [id]
     }
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
     return res;
   }
   catch {
@@ -135,14 +138,15 @@ questions.helpful = async (id) => {
 
 // should report be a delete function?
 questions.report = async (id) => {
-  await pool.connect();
+  const client = await pool.connect();
 
   try {
     const queryText = {
       text: 'UPDATE questions SET reported = reported + 1 WHERE id = $1',
       values: [id]
     }
-    const res = await pool.query(queryText);
+    const res = await client.query(queryText);
+    await client.release();
     return res;
   } catch {
     console.log(`error in questionDB.report`);
