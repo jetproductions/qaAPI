@@ -8,7 +8,8 @@
     "populate": "psql -U postgres <~et/documents/hack-rxr-07/sdc/qaapi/dataTools/dbconfig.sql",
     "generate-answers": "node ./DataTools/Generators/answerDataGenerator.js",
     "generate-photos": "node ./DataTools/Generators/photoDataGenerator.js",
-    "generate-questions": "node ./DataTools/Generators/questionDataGenerator.js"
+    "generate-questions": "node ./DataTools/Generators/questionDataGenerator.js",
+    "fire": "artillery run artillery.yml"
   },
   "repository": {
     "type": "git",

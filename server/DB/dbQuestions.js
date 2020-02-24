@@ -151,9 +151,3 @@ questions.report = async (id) => {
 };
 
 module.exports = questions;
-
-
-// might be better to:
-// separate questions to results obj
-// separate answers to questions
-// separate photos to answers

@@ -1,12 +1,59 @@
 config:
-  target: 'https://artillery.io'
+  target: 'http://localhost:3000'
   phases:
+    # Warm Up
     - duration: 60
-      arrivalRate: 20
-  defaults:
-    headers:
-      x-my-service-auth: '987401838271002188298567'
+      arrivalRate: 1
+    # Below will need adjusting 
+    # Ramp Up
+    # - duration: 30
+    #   arrivalRate: 10
+    # Cruising
+    # - duration: 300
+        # arrivalRate: 20
+    # Crash
+    # - duration: 60
+    #   arrivalRate: 200
+
+  processor: "./DataTools/Generators/StressTestVariable.js"
 scenarios:
-  - flow:
-    - get:
-        url: "/docs"
+  - name: "Get Questions"
+    flow:
+      - log: "New Question Getter"
+      - function: "variableGenerator"
+      - get:
+          url: "/qa/{{ qid }}"
+      - log: "Sent a GET request to /qa with product id {{ qid }}"
+      
+  # - name: "Get Answers"
+  #   flow: 
+  #     - log: "New Answer Getter"
+  #     - function: "variableGenerator"
+  #     - think: 2
+  #     - get:
+  #         url: "/qa/{{ aid }}/answers"
+  #     - log: "Sent a GET request to /qa/{{ aid }}/answers "
+  # - name: "Post Question"
+  #   flow:
+  #     - log: "New Question Poster"
+  #     - function: "variableGenerator"
+  #     - think: 2
+  #     - post:
+  #         url: "/qa/{{ qid }}"
+  #         json:
+  #           body: "{{ body }}"
+  #           asker_name: "{{ name }}"
+  #           asker_email: "{{ email }}"
+  #     - log: "Sent POST request to /qa/{{ qid }}"
+  # - name: "Post Answer"
+  #   flow:
+  #     - log: "New Answer Poster"
+  #     - function: "variableGenerator"
+  #     - post:
+  #         url: "/qa/{{ aid }}/answers"
+  #         json:
+  #           body: "{{ body }}"
+  #           answerer_name: "{{ name }}"
+  #           asker_email: "{{ email }}"
+
+
