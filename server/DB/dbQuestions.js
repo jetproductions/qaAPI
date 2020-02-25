@@ -12,17 +12,19 @@ const pool = new Pool(Setup);
 questions.get = async (id, count = 5) => {
   const client = await pool.connect();
   try { 
+    const originalQuery = `SELECT ans.id AS ans_id, ans.question_id, ans.body AS ans_body, q.body AS q_body, asker_name, answerer_name, q.date_written AS q_date, ans.date_written AS ans_date, q.helpful AS question_helpfulness, ans.helpful AS helpfulness, link AS url, p.id AS photo_id
+    FROM questions q
+    LEFT JOIN answers ans 
+    ON q.id = ans.question_id
+    LEFT JOIN photos p 
+    ON ans.id = p.answer_id
+    WHERE ans.question_id 
+    IN (SELECT q.id FROM questions q WHERE q.product_id = $1 LIMIT $2) 
+    LIMIT $3`;
+
     const ansCount = count * 5;
     const queryText = {
-      text: `SELECT ans.id AS ans_id, ans.question_id, ans.body AS ans_body, q.body AS q_body, asker_name, answerer_name, q.date_written AS q_date, ans.date_written AS ans_date, q.helpful AS question_helpfulness, ans.helpful AS helpfulness, link AS url, p.id AS photo_id
-      FROM questions q
-      LEFT JOIN answers ans 
-      ON q.id = ans.question_id
-      LEFT JOIN photos p 
-      ON ans.id = p.answer_id
-      WHERE ans.question_id 
-      IN (SELECT q.id FROM questions q WHERE q.product_id = $1 LIMIT $2) 
-      LIMIT $3`,
+      text: originalQuery,
       values: [id, ansCount, count]
     };
 

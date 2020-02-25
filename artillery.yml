@@ -3,7 +3,7 @@ config:
   plugins:
     expect: {}
   http:
-    timout: 10
+    timout: 20
   phases:
     # Warm Up
     - duration: 10
@@ -11,15 +11,15 @@ config:
     # # Ramp Up
     - duration: 30
       arrivalRate: 10
-    # # Cruising
-    - duration: 200
+    # Cruising
+    - duration: 60
       arrivalRate: 100
     # Near Crash
     - duration: 45
       arrivalRate: 250
     # Crash
-    # - duration: 60
-    #   arrivalRate: 1000
+    - duration: 60
+      arrivalRate: 1000
 
   processor: "./DataTools/Generators/StressTestVariable.js"
 scenarios:

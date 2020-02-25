@@ -5,5 +5,5 @@ module.exports = {
   database: 'db_auto',
   password,
   port: 5432,
-  max: 100
+  max: 150
 }
